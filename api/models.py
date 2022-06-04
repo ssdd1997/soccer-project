@@ -27,7 +27,6 @@ class Player(Base):
     match_played = Column(Integer)
     goals = Column(Integer)
     assists = Column(Integer)
-    distance_covered = Column(DECIMAL)
     saved = Column(Integer)
     conceded = Column(Integer)
     fk_club = Column(Integer, ForeignKey("t_clubs.id_club"))

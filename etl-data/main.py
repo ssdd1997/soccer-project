@@ -26,7 +26,7 @@ class Database:
 class Extractor:
 
     def extract(self):
-        df_key_stats = pd.read_csv('key_stats.csv', encoding='utf-8')
+        df_key_stats = pd.read_csv('key_stats.csv', encoding='utf-8', usecols=Constants.KEY_STATS_COLUMNS)
         df_goalkeeper_stats = pd.read_csv('goalkeeping.csv', encoding='utf-8', usecols=['player_name', 'saved', 'conceded'])
         df_total = pd.merge(df_key_stats, df_goalkeeper_stats, on='player_name', how='left')
         return df_total

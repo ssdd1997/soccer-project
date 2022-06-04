@@ -66,3 +66,4 @@ node_modules/
 .serverless/
 Front/client/app/app-style-processed.css
 test-reports/
+.env

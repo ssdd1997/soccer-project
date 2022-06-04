@@ -1,4 +1,5 @@
 class Constants:
+    KEY_STATS_COLUMNS = ['player_name','club','position','minutes_played','match_played','goals','assists']
 
     TRUNCATE_CLUBS = """DELETE FROM t_clubs;"""
     TRUNCATE_POSITIONS = """DELETE FROM t_positions;"""
@@ -31,7 +32,6 @@ class Constants:
     match_played     integer,
     goals             integer,
     assists          integer,
-    distance_covered DECIMAL(4, 1),
     saved            integer,
     conceded         integer,
     fk_club          integer

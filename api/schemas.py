@@ -1,10 +1,17 @@
-from typing import List
+from typing import List, Union
 
 from pydantic import BaseModel
 
 
 class Player(BaseModel):
-    goals: int
+    id_player : int
+    player_name : str
+    minutes_played : int
+    match_played : int
+    goals : int
+    assists : int
+    saved : Union[int, None] = None
+    conceded : Union[int, None] = None
 
     class Config:
         orm_mode = True
@@ -20,7 +27,7 @@ class Club(BaseModel):
 
 
 class Position(BaseModel):
-    is_position: int
+    id_position: int
     position: str
     players: List[Player] = []
 

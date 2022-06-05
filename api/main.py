@@ -93,20 +93,20 @@ async def logout(request: Request):
 
 @app.get("/clubs/", response_model=List[schemas.Club])
 def read_clubs(request: Request,skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    user = request.session.get('user')
-    if user:
+    #user = request.session.get('user')
+    #if user:
         clubs = crud.get_clubs(db, skip=skip, limit=limit)
         return clubs
-    return HTMLResponse('<a href="/login">login</a>')
+    #return HTMLResponse('<a href="/login">login</a>')
 
 
 @app.get("/positions/", response_model=List[schemas.Position])
 def read_positions(request: Request,skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    user = request.session.get('user')
-    if user:
+    #user = request.session.get('user')
+    #if user:
         positions = crud.get_positions(db, skip=skip, limit=limit)
         return positions
-    return HTMLResponse('<a href="/login">login</a>')
+    #return HTMLResponse('<a href="/login">login</a>')
 
 
 @app.get("/players/", response_model=List[schemas.Player])

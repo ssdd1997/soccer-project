@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
+import Players from "../views/Players";
+import Player from "../views/Player";
 
 Vue.use(VueRouter);
 
@@ -16,6 +18,19 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/players',
+    name: 'Players',
+    component: Players,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: '/players/:id',
+    name: 'Player',
+    component: Player,
+    meta: {requiresAuth: true},
+    props: true,
   }
 ]
 

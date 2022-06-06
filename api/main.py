@@ -54,68 +54,30 @@ def get_db():
         db.close()
 
 
-@app.get('/login')
-async def login(request: Request):
-    redirect_uri = request.url_for('auth')
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+@app.get("/clubs/", response_model=List[schemas.ClubWithPlayers])
+def read_clubs(request: Request,skip: int = 0, limit: int = 1000, db: Session = Depends(get_db)):
+    clubs = crud.get_clubs(db, skip=skip, limit=limit)
+    return clubs
 
 
-@app.get('/')
-async def homepage(request: Request):
-    user = request.session.get('user')
-    if user:
-        data = json.dumps(user)
-        html = (
-            f'<pre>{data}</pre>'
-            '<a href="/logout">logout</a>'
-        )
-        return HTMLResponse(html)
-    return HTMLResponse('<a href="/login">login</a>')
+@app.get("/positions/", response_model=List[schemas.PositionWithPlayers])
+def read_positions(request: Request,skip: int = 0, limit: int = 1000, db: Session = Depends(get_db)):
+    positions = crud.get_positions(db, skip=skip, limit=limit)
+    return positions
 
 
-@app.get('/auth')
-async def auth(request: Request):
-    try:
-        token = await oauth.google.authorize_access_token(request)
-    except OAuthError as error:
-        return HTMLResponse(f'<h1>{error.error}</h1>')
-    user = token.get('userinfo')
-    if user:
-        request.session['user'] = dict(user)
-    return RedirectResponse(url='/')
+@app.get("/players/", response_model=List[schemas.PlayerWithClubAndPosition])
+def read_players(request: Request, skip: int = 0, limit: int = 1000, db: Session = Depends(get_db)):
+    players = crud.get_players(db, skip=skip, limit=limit)
+    return players
 
 
-@app.get('/logout')
-async def logout(request: Request):
-    request.session.pop('user', None)
-    return RedirectResponse(url='/')
-
-
-@app.get("/clubs/", response_model=List[schemas.Club])
-def read_clubs(request: Request,skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    #user = request.session.get('user')
-    #if user:
-        clubs = crud.get_clubs(db, skip=skip, limit=limit)
-        return clubs
-    #return HTMLResponse('<a href="/login">login</a>')
-
-
-@app.get("/positions/", response_model=List[schemas.Position])
-def read_positions(request: Request,skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    #user = request.session.get('user')
-    #if user:
-        positions = crud.get_positions(db, skip=skip, limit=limit)
-        return positions
-    #return HTMLResponse('<a href="/login">login</a>')
-
-
-@app.get("/players/", response_model=List[schemas.Player])
-def read_players(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    #user = request.session.get('user')
-    #if user:
-        players = crud.get_players(db, skip=skip, limit=limit)
-        return players
-    #raise HTTPException(status_code=403, detail="User has not permission.")
+@app.get("/players/{id_player}", response_model=schemas.PlayerWithClubAndPosition)
+def read_player(id_player: int, db: Session = Depends(get_db)):
+    db_player = crud.get_player_by_id(db, id=id_player)
+    if db_player is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_player
 
 
 if __name__ == "__main__":

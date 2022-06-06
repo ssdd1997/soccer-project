@@ -1,4 +1,4 @@
-anyio==3.6.1
+ºanyio==3.6.1
 asgiref==3.5.2
 Authlib==1.0.1
 certifi==2022.5.18.1

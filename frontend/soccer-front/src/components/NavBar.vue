@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="/">FastAPI + Vue</a>
+        <a class="navbar-brand" href="/">Champions Players</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -12,10 +12,7 @@
               <router-link class="nav-link" to="/">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/profile">My Profile</router-link>
+              <router-link class="nav-link" to="/players">Players</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" @click="logout">Log Out</a>
@@ -24,9 +21,6 @@
           <ul v-else class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
               <router-link class="nav-link" to="/">Home</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/register">Register</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/login">Log In</router-link>
@@ -39,17 +33,31 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: 'NavBar',
+  data() {
+    return {gAuth : this.$gAuth}
+  },
   computed: {
     isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+      console.log(this.$store.getters.stateUser.isAuthorized)
+      return this.$store.getters.stateUser.isAuthorized;
     }
   },
   methods: {
+    ...mapActions(['logOut']),
     async logout () {
-      await this.$store.dispatch('logOut');
-      this.$router.push('/login');
+      try {
+        await this.logOut(this.gAuth);
+        console.log(this.gAuth)
+        this.$router.go()
+      }
+      catch (error){
+        console.log(error);
+        this.$alert("Error to log out.");
+      }
     }
   },
 }

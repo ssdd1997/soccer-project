@@ -1,24 +1,26 @@
 <template>
   <section>
-    <p>This site is built with FastAPI and Vue.</p>
+    <p>Page with info about Champions League 2021/2022.</p>
 
     <div v-if="isLoggedIn" id="logout">
-      <p id="logout">Click <a href="/dashboard">here</a> to view all notes.</p>
+      <p id="logout">Click <a href="/players">here</a> to view all players.</p>
     </div>
     <p v-else>
-      <span><a href="/register">Register</a></span>
-      <span> or </span>
       <span><a href="/login">Log In</a></span>
     </p>
   </section>
 </template>
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
   name: 'Home',
   computed : {
+    ...mapGetters({ players: 'stateUser'}),
     isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+      console.log(this.$store.getters.stateUser.isAuthorized)
+      return this.$store.getters.stateUser.isAuthorized;
     }
   },
 }
